@@ -1,9 +1,12 @@
 require_relative 'requirements'
 
 class Board
+
 include Slideable
 include Stepable
 
+
+  
   def self.generate_pieces(board)
     black = 'black'
     white = 'white'
@@ -21,6 +24,7 @@ include Stepable
 
     end
 
+
     (0...board.length).each do |i|
       (0...board[0].length).each do |j| 
           pos = [i,j]
@@ -37,25 +41,27 @@ include Stepable
             board[pos[0]][pos[1]] = Queen.new(black, board, pos, :Q)
 
           elsif board[pos[0]][pos[1]] == :K
-            board[pos[0]][pos[1]] = Queen.new(black, board, pos, :Q)
+            board[pos[0]][pos[1]] = King.new(black, board, pos, :K)
           
           elsif board[pos[0]][pos[1]] == '_'
 
-            board[pos[0]][pos[1]]= NullPiece.new()
+            board[pos[0]][pos[1]]= NullPiece.instance
 
-          #else 
-          #  board[pos[0]][pos[1]] = Pawn.new(black, board, pos, '_')
+          elsif board[pos[0]][pos[1]] == :P
+
+           board[pos[0]][pos[1]] = Pawn.new(black, board, pos, :P)
+
           end
           
       end
     end
 
-    #defaults.each do |row|
-    #  if row == 0 || row == 1
-    #    board[row].map!{|el| el.color = white}
-    #  
-    #  end 
-    #end
+    defaults.each do |row|
+      if row == 0 || row == 1
+        elsif row == 6 || row == 7
+        board[row].each{|el| el.color = black}
+      end 
+    end
 
 
 
@@ -89,7 +95,10 @@ include Stepable
 
   def render
     @board.each do |row|
-      print row
+      row.each do |el|
+        print ' ', el.symbol
+      end
+      puts
     end
   end
 

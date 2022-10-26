@@ -134,7 +134,6 @@ end
 
 class Piece
   ##superclass
-  attr_accessor :board, :pos, :color, :symbol 
   def initialize(color, board, pos, symbol)
     @symbol = symbol
     @board = board
@@ -152,6 +151,7 @@ class Piece
   def symbol
     
   end
+  attr_accessor :board, :pos, :color, :symbol 
 
   private
   def move_into_check?(end_pos)
@@ -243,7 +243,7 @@ class NullPiece < Piece
   
   
   include Singleton
-
+   
 
   def initialize
     @color = nil
@@ -260,7 +260,7 @@ end
 
 
 class Pawn < Piece
-
+  
   
 end
 
