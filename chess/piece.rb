@@ -240,6 +240,7 @@ end
 
 
 class NullPiece < Piece
+
   
   
   include Singleton
@@ -261,6 +262,8 @@ end
 
 class Pawn < Piece
   
-  
+  def moves
+
+  end
 end
 
