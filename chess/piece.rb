@@ -41,7 +41,8 @@ module Slideable
     straights = []
 
 
-    moves.each do |y, x|
+    moves.each do |ele|
+      y, x = ele[0], ele[1]
       7.times do |k|
         k = k + 1
         new_i = i + y*k
@@ -58,11 +59,11 @@ module Slideable
 
   def move_dirs(pos)
 
-    if @board[pos] == :B
+    if @board[pos[0]][pos[1]].symbol == :B
       diagonal(pos)
-    elsif @board[pos] == :R
+    elsif @board[pos[0]][pos[1]].symbol == :R
       straight(pos)
-    elsif @board[pos] == :Q
+    elsif @board[pos[0]][pos[1]].symbol == :Q
       straight(pos) + diagonal(pos)
     end
 
@@ -197,7 +198,7 @@ class Bishop < Piece
   include Slideable
 
   def valid_moves?(end_pos)
-    move_dirs(self.pos).include?(end_pos)
+    self.pos.move_dirs.include?(end_pos)
   end
 
   private
@@ -266,11 +267,14 @@ class Pawn < Piece
 
   end
 
-  def valid_moves?
+  def valid_moves?(end_pos)
+    move_dirs(self.pos).include?(end_pos)
+  end
+
+  def move_dirs(pos)
     valid = []
 
-
-    y, x = self.pos.first, self.pos.last
+    y, x = pos.first, pos.last
 
     if self.color == 'black' && y == 1
       valid << [y+1, x] if has_piece?(y+1, x)
@@ -290,11 +294,11 @@ class Pawn < Piece
 
 
     if self.color == 'black'
-      if self.board[y+1, x+1].color == 'white' && in_bounds?(y+1,x+1)
+      if self.board[y+1][x+1].color == 'white' && in_bounds?(y+1,x+1)
         valid << [y+1, x+1]
       end
 
-      if self.board[y+1, x-1].color == 'white' && in_bounds?(y+1,x+1)
+      if self.board[y+1][x-1].color == 'white' && in_bounds?(y+1,x+1)
         valid << [y+1, x-1]
       end
 
@@ -317,6 +321,7 @@ class Pawn < Piece
   end
 
   def has_piece?(y, x)
-    return !self.board[y, x].color
+
+    return !self.board[y][x].color
   end
 end

@@ -21,8 +21,13 @@ include Stepable
 
   def self.generate_pawns(color, board, row)
 
-    pawns = Array.new(8){Pawn.new(color,board, row, :P)}
+    pawns = []
 
+    (0...8).each do |j|
+    
+      pawns << Pawn.new(color,board,[row, j],:P)
+
+    end
     pawns
 
   end
@@ -58,6 +63,7 @@ include Stepable
 
 
   attr_reader :board
+
   def initialize()
     #@board = Array.new(8){Array.new(8, '_')}
     @board = Board.generate_pieces()
@@ -66,17 +72,13 @@ include Stepable
 
   def move_piece(start_pos, end_pos)
     ### There is no logic check for if there is a valid move.
-    x_start, y_start = start_pos
-    x_end, y_end = end_pos
-
     if self[start_pos].symbol == '_'
       raise "There's no piece to move at this position"
 
-    # elsif x_end.between?(0, 7) && y_end.between?(0, 7)
-    #   && x_start.between?(0, 7) && y_end.between(0, 7)
-    else
+    elsif self[start_pos].valid_moves?(end_pos)
       self[end_pos] = self[start_pos]
       self[start_pos] = NullPiece.instance
+      self[end_pos].pos = end_pos
 
     end
 
@@ -106,7 +108,3 @@ end
 ## if something in front. Cant move to that space
 ## can move diagnoaly by one space if enemy is their
 ## Black are rows on top and white are rows on bottom.
-
-b = Board.new
-b.move_piece([0,0], [5,0])
-b.render
